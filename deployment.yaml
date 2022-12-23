@@ -1,0 +1,36 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: smokingdragonservice
+spec:
+  selector:
+    app: smokingdragon
+  ports:
+    - protocol: "TCP"
+      port: 3000
+      targetPort: 80
+      nodePort: 30002
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smokingdragon
+spec:
+  selector:
+    matchLabels:
+      app: smokingdragon
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: smokingdragon
+    spec:
+      containers:
+        - name: smokingdragon
+          image: veekram/smokingdragon:v1.0.0
+          ports:
+            - containerPort: 3000
+
